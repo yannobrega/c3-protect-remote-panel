@@ -34,3 +34,9 @@ test("rotas sensíveis exigem permissão e mesma origem", async () => {
     assert.match(source, /assertSameOrigin/);
   }
 });
+
+test("chave explícita do gateway não depende da chave das credenciais", async () => {
+  const source = await readFile(new URL("../lib/credentials.ts", import.meta.url), "utf8");
+  assert.match(source, /process\.env\.GATEWAY_API_KEY/);
+  assert.match(source, /if \(configuredKey\) return configuredKey/);
+});

@@ -75,6 +75,9 @@ export async function decryptCredential(encrypted: string, encodedIv: string) {
 }
 
 export async function deriveGatewayApiKey() {
+  const configuredKey = process.env.GATEWAY_API_KEY?.trim();
+  if (configuredKey) return configuredKey;
+
   const key = await crypto.subtle.importKey(
     "raw",
     credentialKeyBytes(),

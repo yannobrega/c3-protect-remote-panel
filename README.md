@@ -20,13 +20,14 @@ BOOTSTRAP_ADMIN_EMAIL=yan.nobrega@c3support.com.br
 BOOTSTRAP_ADMIN_NAME=Yan Nobrega
 BOOTSTRAP_ADMIN_PASSWORD=UMA_SENHA_FORTE_COM_12_OU_MAIS_CARACTERES
 CREDENTIAL_ENCRYPTION_KEY=SEGREDO_ALEATORIO_DO_PAINEL
+GATEWAY_API_KEY=CHAVE_ATUAL_DO_REMOTE_GATEWAY
 GATEWAY_BASE_URL=https://remote.c3protect.com.br
 NODE_ENV=production
 PORT=3000
 HOSTNAME=0.0.0.0
 ```
 
-Nunca envie essas variáveis para o Git. A `CREDENTIAL_ENCRYPTION_KEY` cifra as credenciais das RBs e também deriva a chave usada para autenticar no gateway; mantenha backup seguro dela.
+Nunca envie essas variáveis para o Git. A `CREDENTIAL_ENCRYPTION_KEY` cifra as credenciais das RBs; mantenha backup seguro dela. A `GATEWAY_API_KEY` permite que o novo painel use o gateway atual sem alterar o serviço que já está em produção. Quando ela não é informada, o sistema mantém compatibilidade e deriva a chave a partir da chave de criptografia.
 
 ## Deploy no EasyPanel
 
