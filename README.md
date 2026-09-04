@@ -22,6 +22,8 @@ BOOTSTRAP_ADMIN_PASSWORD=UMA_SENHA_FORTE_COM_12_OU_MAIS_CARACTERES
 CREDENTIAL_ENCRYPTION_KEY=SEGREDO_ALEATORIO_DO_PAINEL
 GATEWAY_API_KEY=CHAVE_ATUAL_DO_REMOTE_GATEWAY
 GATEWAY_BASE_URL=https://remote.c3protect.com.br
+MIGRATION_SOURCE_URL=https://access.c3protect.com.br
+MIGRATION_EXPORT_TOKEN=CHAVE_TEMPORARIA_OPCIONAL
 NODE_ENV=production
 PORT=3000
 HOSTNAME=0.0.0.0
@@ -40,6 +42,17 @@ Nunca envie essas variáveis para o Git. A `CREDENTIAL_ENCRYPTION_KEY` cifra as 
 7. Teste `https://DOMINIO-TEMPORARIO/api/health` e o login.
 8. Migre os dados do painel atual.
 9. Somente depois dos testes, mova `access.c3protect.com.br` para esse serviço.
+
+## Migração do painel anterior
+
+Enquanto `access.c3protect.com.br` ainda aponta para o painel anterior, entre no
+novo painel como administrador e abra `/migration`. O importador copia empresas,
+MikroTiks, credenciais SSH e histórico de sessões, recriptografando as senhas com
+a `CREDENTIAL_ENCRYPTION_KEY` do PostgreSQL. A operação é idempotente.
+
+Se `MIGRATION_EXPORT_TOKEN` não estiver configurada, a migração temporária usa a
+`GATEWAY_API_KEY` já compartilhada pelos dois serviços. Após validar os dados,
+remova a rota de exportação do painel anterior e rotacione a chave do gateway.
 
 ## Verificação local
 
