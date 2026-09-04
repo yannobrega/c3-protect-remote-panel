@@ -21,7 +21,13 @@ export function MigrationClient() {
     setResult(null);
     try {
       const response = await fetch("/api/admin/migration", { method: "POST" });
-      const data = await response.json() as Result & { error?: string };
+      const body = await response.text();
+      let data: Result & { error?: string };
+      try {
+        data = JSON.parse(body) as Result & { error?: string };
+      } catch {
+        throw new Error(`O servidor respondeu em formato inválido (HTTP ${response.status}).`);
+      }
       if (!response.ok) throw new Error(data.error || "Falha na migração.");
       setResult(data);
     } catch (cause) {

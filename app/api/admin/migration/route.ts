@@ -84,13 +84,23 @@ export async function POST(request: Request) {
   try {
     const response = await fetch(migrationSource(), {
       method: "POST",
-      headers: { authorization: `Bearer ${token}`, accept: "application/json" },
+      headers: {
+        authorization: `Bearer ${token}`,
+        accept: "application/json",
+        ...(process.env.MIGRATION_SOURCE_BYPASS_TOKEN?.trim()
+          ? { "OAI-Sites-Authorization": `Bearer ${process.env.MIGRATION_SOURCE_BYPASS_TOKEN.trim()}` }
+          : {}),
+      },
       cache: "no-store",
       signal: AbortSignal.timeout(45_000),
     });
     if (!response.ok) {
       return Response.json(
-        { error: response.status === 401 ? "A chave de migração não confere." : "O painel antigo não liberou a exportação." },
+        {
+          error: response.status === 401 || response.status === 403
+            ? "O painel antigo bloqueou a chamada. Confira a chave de acesso temporária."
+            : `O painel antigo não liberou a exportação (HTTP ${response.status}).`,
+        },
         { status: 502 },
       );
     }
